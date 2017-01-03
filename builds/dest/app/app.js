@@ -43,6 +43,10 @@ function TrainingsCtrl(fire) {
         }
     };
 
+    vm.removeExFromProgram = function(item) {
+        fire.removeExFromProgram(item);
+    };
+
     fire.getAllExercises().then(function(_d) {
         vm.exslist = _d;
     });
