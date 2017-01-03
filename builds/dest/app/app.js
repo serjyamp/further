@@ -43,8 +43,8 @@ function TrainingsCtrl(fire) {
         }
     };
 
-    vm.removeExFromProgram = function(item) {
-        fire.removeExFromProgram(item);
+    vm.removeExFromProgram = function(day, exercise) {
+        fire.removeExFromProgram(day, exercise);
     };
 
     fire.getAllExercises().then(function(_d) {
@@ -79,21 +79,21 @@ function fire($log, $firebaseObject, $firebaseArray) {
     // exercises
     var exercisesRef = ref.child('exercises');
     var allExercises = $firebaseArray(exercisesRef);
-    
+
     vm.getAllExercises = function(cb) {
         return allExercises.$loaded(cb);
     };
     vm.addNewEx = function(cb) {
         var duplicate = false;
-        angular.forEach(allExercises, function(value, key){
+        angular.forEach(allExercises, function(value, key) {
             console.log(value.$value);
-            if (value.$value == cb){
+            if (value.$value == cb) {
                 duplicate = true;
                 return;
             }
         });
 
-        if (!duplicate){
+        if (!duplicate) {
             return allExercises.$add(cb);
         }
 
@@ -108,7 +108,9 @@ function fire($log, $firebaseObject, $firebaseArray) {
         return programArr.$loaded(cb);
     };
 
-    vm.removeExFromProgram = function(item) {
+    vm.removeExFromProgram = function(day, exercise) {
+        var dayRef = ref.child('program').child(day);
+        var item = dayRef[exercise];
         return programArr.$remove(item);
     };
 }

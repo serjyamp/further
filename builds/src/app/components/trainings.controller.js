@@ -11,8 +11,8 @@ function TrainingsCtrl(fire) {
         }
     };
 
-    vm.removeExFromProgram = function(item) {
-        fire.removeExFromProgram(item);
+    vm.removeExFromProgram = function(day, exercise) {
+        fire.removeExFromProgram(day, exercise);
     };
 
     fire.getAllExercises().then(function(_d) {
