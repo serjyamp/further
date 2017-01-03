@@ -1,0 +1,26 @@
+doctype html
+html(ng-app="futher")
+head
+	meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+	title Further
+	base(href="/")
+	link(rel="stylesheet", href="vendor/bootstrap/css/bootstrap.min.css")
+	link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/bootstrap-material-design.min.css")
+	link(rel="stylesheet", href="vendor/fa/css/font-awesome.min.css")
+	link(rel="stylesheet", href="css/css.min.css")
+body
+	div.wrap
+		div(ng-include="'app/layout/navbar.html'")
+
+		.container
+			div(ui-view)
+	footer
+		.container © Serhii Yampolskyi, 2017. All rights reserved.
+	
+	//- vendor files
+	script(src="vendor/jquery/jquery.min.js")
+	script(src="vendor/bootstrap/js/bootstrap.min.js")
+	//- angularjs dependencies
+	script(src="vendor/angular/angular.concat.js")
+	//- app files
+	script(src="app/app.js")

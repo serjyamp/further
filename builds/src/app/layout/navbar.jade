@@ -1,0 +1,24 @@
+.navbar.navbar-inverse
+  .container
+    .navbar-header
+      button.navbar-toggle(type='button' data-toggle='collapse' data-target='.navbar-inverse-collapse')
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand(href='/') Further
+    .navbar-collapse.collapse.navbar-inverse-collapse
+      ul.nav.navbar-nav
+        li(ui-sref-active="active")
+          a(ui-sref='trainings' href="") Trainings
+        li(ui-sref-active="active")
+          a(ui-sref='nutrition' href="") Nutrition
+      ul.nav.navbar-nav.navbar-right
+        li.dropdown
+          a.dropdown-toggle(href='index.html' data-target='#' data-toggle='dropdown')
+            | Login
+            b.caret
+          ul.dropdown-menu
+            li
+              a(href='#') Standard
+            li
+              a(href='#') Google
