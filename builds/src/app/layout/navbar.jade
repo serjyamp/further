@@ -5,15 +5,24 @@
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      a.navbar-brand(href='/') Further
+      a.navbar-brand(ui-sref='program') Further
     .navbar-collapse.collapse.navbar-inverse-collapse
+      ul.nav.navbar-nav
+        li(ui-sref-active="active")
+          a(ui-sref='program' href="") Program
+        li(ui-sref-active="active")
+          a(ui-sref='exercises' href="") Exercises
       ul.nav.navbar-nav.navbar-right
         li.dropdown
-          a.dropdown-toggle(href='index.html' data-target='#' data-toggle='dropdown')
+          a.dropdown-toggle(data-target='#' data-toggle='dropdown')
             | Login
             b.caret
           ul.dropdown-menu
-            li(ng-show="!$rootScope.isSigned")
-              a(ng-click="vm.signin()").navbar_link Google
-            li(ng-show="$rootScope.isSigned")
-              a(ng-click="vm.signout()").navbar_link Sign out
+            //- li(ng-show="!$rootScope.isSigned")
+            //-   a(ng-click="vm.signin()").navbar_link Google
+            //- li(ng-show="$rootScope.isSigned")
+            //-   a(ng-click="vm.signout()").navbar_link Sign out
+            li()
+              a(ng-click="vm.auth.$signInWithPopup('google')").navbar_link Google
+            li()
+              a(ng-click="vm.auth.$signOut()").navbar_link Sign out

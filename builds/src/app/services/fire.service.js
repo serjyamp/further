@@ -9,7 +9,7 @@ var config = {
 firebase.initializeApp(config);
 
 angular
-    .module('futher.fire.service', ['firebase'])
+    .module('further.fire.service', ['firebase'])
     .service('fire', fire);
 
 function fire($log, $firebaseObject, $firebaseArray, $rootScope) {

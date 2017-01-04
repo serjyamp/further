@@ -1,4 +1,4 @@
-angular.module('futher.Trainings', [])
+angular.module('further.Trainings', [])
     .controller('TrainingsCtrl', TrainingsCtrl)
 
 function TrainingsCtrl(fire, $filter, $rootScope) {

@@ -1,29 +1,35 @@
 
 TrainingsCtrl.$inject = ["fire", "$filter", "$rootScope"];
-NavbarCtrl.$inject = ["$rootScope"];
+NavbarCtrl.$inject = ["$rootScope", "AuthFactory"];
+    AuthFactory.$inject = ["$firebaseAuth"];
 fire.$inject = ["$log", "$firebaseObject", "$firebaseArray", "$rootScope"];angular
-    .module('futher', [
+    .module('further', [
         'ui.router',
-        'futher.Navbar',
-        'futher.Trainings',
-        'futher.fire.service'
+        'further.Navbar',
+        'further.Trainings',
+        'further.fire.service',
+        'further.auth.factory'
     ])
     .config(config);
 
 function config($stateProvider, $urlRouterProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/program');
 
     $stateProvider
         .state('/', {
             url: '/',
+            template: "<h1>Hello</h1>"
+        })
+        .state('/program', {
+            url: '/program',
             templateUrl: 'app/components/trainings.html',
             controller: 'TrainingsCtrl',
             controllerAs: 'vm'
         });
 }
-angular.module('futher.Trainings', [])
+angular.module('further.Trainings', [])
     .controller('TrainingsCtrl', TrainingsCtrl)
 
 function TrainingsCtrl(fire, $filter, $rootScope) {
@@ -62,25 +68,38 @@ function TrainingsCtrl(fire, $filter, $rootScope) {
     };
 }
 
-angular.module('futher.Navbar', [])
+angular.module('further.Navbar', [])
     .controller('NavbarCtrl', NavbarCtrl);
 
-function NavbarCtrl($rootScope) {
+function NavbarCtrl($rootScope, AuthFactory) {
     var vm = this;
-    var provider = new firebase.auth.GoogleAuthProvider();
+    vm.auth = AuthFactory;
 
-    $rootScope.isSigned = false;
-    vm.signin = function() {
-        firebase.auth().signInWithPopup(provider).then(function(result) {
-            $rootScope.isSigned = true;
-        }).catch(function(error) {});
-    };
-    vm.signout = function() {
-        firebase.auth().signOut().then(function() {
-            $rootScope.isSigned = false;
-        }, function(error) {});
-    };
+    vm.auth.$onAuthStateChanged(function(firebaseUser) {
+      $rootScope.firebaseUser = firebaseUser;
+      console.log($rootScope.firebaseUser);
+    });
+
+    // vm.signin = function() {
+    //     console.log(vm.auth)
+    //     vm.auth.signInWithPopup(provider).then(function(result) {
+    //         $rootScope.isSigned = true;
+    //     }).catch(function(error) {});
+    // };
+    // vm.signout = function() {
+    //     vm.auth.signOut().then(function() {
+    //         $rootScope.isSigned = false;
+    //     }, function(error) {});
+    // };
 }
+
+angular
+    .module("further.auth.factory", ["firebase"])
+    .factory("AuthFactory", AuthFactory);
+
+    function AuthFactory($firebaseAuth){
+    	return $firebaseAuth();
+    }
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyDLAofEFCEF-s0_oyxVePgmRQPq-PSh5nk",
@@ -92,7 +111,7 @@ var config = {
 firebase.initializeApp(config);
 
 angular
-    .module('futher.fire.service', ['firebase'])
+    .module('further.fire.service', ['firebase'])
     .service('fire', fire);
 
 function fire($log, $firebaseObject, $firebaseArray, $rootScope) {
