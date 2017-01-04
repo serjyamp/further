@@ -27,7 +27,6 @@ function fire($log, $firebaseObject, $firebaseArray) {
     vm.addNewEx = function(cb) {
         var duplicate = false;
         angular.forEach(allExercises, function(value, key) {
-            console.log(value.$value);
             if (value.$value == cb) {
                 duplicate = true;
                 return;
@@ -50,8 +49,29 @@ function fire($log, $firebaseObject, $firebaseArray) {
     };
 
     vm.removeExFromProgram = function(day, exercise) {
-        var dayRef = ref.child('program').child(day);
-        var item = dayRef[exercise];
-        return programArr.$remove(item);
+        var dayRef = ref.child('program/' + day);
+        var dayArr = $firebaseArray(dayRef);
+        var item = dayArr[exercise];
+        console.log(dayArr[exercise])
+        return dayArr.$remove(item);
+    };
+
+    vm.addExToProgram = function(day, name, sets, repeats) {
+        var obj = {
+            name: name,
+            sets: sets,
+            repeats: repeats
+        };
+
+        // var dayExists = false;
+        // angular.forEach(programArr, function(value,key){
+        //     if (value == day){
+        //         dayExists = true;
+        //     }
+        // });
+
+        var dayRef = ref.child('program/' + day);
+        var dayArr = $firebaseArray(dayRef);
+        dayArr.$add(obj);
     };
 }

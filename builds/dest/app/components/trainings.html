@@ -31,7 +31,7 @@
                   <input type="text" ng-value="ex.repeats" class="form-control simple_input"/>
                 </div>
                 <div class="col-sm-1 text-right">
-                  <button ng-click="vm.removeExFromProgram(day.$id, ex.$id)" class="btn btn-raised btn-danger simple_btn"><i aria-hidden="true" class="fa fa-times-circle-o"></i></button>
+                  <button ng-click="vm.removeExFromProgram(day.$id, $index)" class="btn btn-raised btn-danger simple_btn"><i aria-hidden="true" class="fa fa-times-circle-o"></i></button>
                 </div>
               </div>
             </div>
@@ -84,14 +84,14 @@
           <div class="row">
             <div class="col-sm-12">
               <label for="selDayOfWeek">Day of week:</label>
-              <select id="selDayOfWeek" class="form-control">
-                <option>Monday</option>
-                <option>Tuesday</option>
-                <option>Wednesday</option>
-                <option>Thursday</option>
-                <option>Friday</option>
-                <option>Saturday</option>
-                <option>Sunday</option>
+              <select id="selDayOfWeek" ng-model="vm.newProgramExDay" ng-init="vm.newProgramExDay = 'Monday'" class="form-control">
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
               </select>
             </div>
           </div>
@@ -110,15 +110,15 @@
             <div class="row sel_exs_content">
               <div class="row">
                 <div class="col-sm-8">
-                  <select id="selExFromList" class="form-control">
-                    <option ng-repeat="item in vm.exslist">{{item.$value}}</option>
+                  <select id="selExFromList" ng-model="vm.newProgramExName" class="form-control">
+                    <option ng-repeat="item in vm.exslist" ng-value="item.$value">{{item.$value}}</option>
                   </select>
                 </div>
                 <div class="col-sm-2">
-                  <input type="text" class="form-control simple_input"/>
+                  <input type="text" ng-model="vm.newProgramExSets" class="form-control simple_input"/>
                 </div>
                 <div class="col-sm-2">
-                  <input type="text" class="form-control simple_input"/>
+                  <input type="text" ng-model="vm.newProgramExRepeats" class="form-control simple_input"/>
                 </div>
               </div>
             </div>
@@ -127,7 +127,7 @@
       </div>
       <div class="modal-footer">
         <div class="col-sm-12">
-          <button class="btn btn-raised btn-success">Add</button>
+          <button ng-click="vm.addExToProgram()" class="btn btn-raised btn-success">Add</button>
         </div>
       </div>
     </div>

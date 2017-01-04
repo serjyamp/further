@@ -1,8 +1,10 @@
 angular.module('futher.Trainings', [])
-    .controller('TrainingsCtrl', TrainingsCtrl);
+    .controller('TrainingsCtrl', TrainingsCtrl)
 
-function TrainingsCtrl(fire) {
+function TrainingsCtrl(fire, $filter) {
     var vm = this;
+
+    // exercises
     vm.newex = null;
 
     vm.addNewEx = function() {
@@ -19,7 +21,20 @@ function TrainingsCtrl(fire) {
         vm.exslist = _d;
     });
 
+    // program
     fire.getProgram().then(function(_d) {
         vm.program = _d;
     });
+
+    vm.newProgramExDay = null;
+    vm.newProgramExName = null;
+    vm.newProgramExSets = null;
+    vm.newProgramExRepeats = null;
+    vm.addExToProgram = function() {
+        if (vm.newProgramExDay && vm.newProgramExName && vm.newProgramExSets && vm.newProgramExRepeats) {
+            fire.addExToProgram(vm.newProgramExDay, vm.newProgramExName, vm.newProgramExSets, vm.newProgramExRepeats);
+        }
+    };
+
+    var daysInWeekList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 }
