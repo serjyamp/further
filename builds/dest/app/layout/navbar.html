@@ -2,12 +2,12 @@
 <div ng-controller="NavbarCtrl as vm" class="navbar navbar-inverse">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" data-toggle="collapse" data-target=".navbar-inverse-collapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a ui-sref="program" class="navbar-brand">Further</a>
+      <button type="button" data-toggle="collapse" data-target=".navbar-inverse-collapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a ui-sref="/" class="navbar-brand">Further</a>
     </div>
     <div class="navbar-collapse collapse navbar-inverse-collapse">
       <ul class="nav navbar-nav">
-        <li ui-sref-active="active"><a ui-sref="program" href="">Program</a></li>
-        <li ui-sref-active="active"><a ui-sref="exercises" href="">Exercises</a></li>
+        <li ui-sref-active="active" ng-if="$rootScope.firebaseUser"><a ui-sref="program" href="">Program</a></li>
+        <li ui-sref-active="active"><a ui-sref="exercises" href="" ng-if="$rootScope.firebaseUser">Exercises</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown"><a data-target="#" data-toggle="dropdown" class="dropdown-toggle">Login<b class="caret"></b></a>

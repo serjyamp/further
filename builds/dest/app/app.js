@@ -22,7 +22,7 @@ function config($stateProvider, $urlRouterProvider, $locationProvider) {
             url: '/',
             template: "<h1>Hello</h1>"
         })
-        .state('/program', {
+        .state('program', {
             url: '/program',
             templateUrl: 'app/components/trainings.html',
             controller: 'TrainingsCtrl',

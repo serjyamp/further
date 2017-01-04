@@ -1,4 +1,4 @@
-.main_content(ng-show="$rootScope.firebaseUser")
+.main_content
 	ul.nav.nav-tabs(style='margin-bottom: 15px;')
 		li.active
 			a(href='#program' data-toggle='tab') Program
@@ -91,5 +91,3 @@
 				.modal-footer
 					.col-sm-12
 						button.btn.btn-raised.btn-success(ng-click="vm.addExToProgram()") Add
-.temp_content(ng-hide="$rootScope.firebaseUser")
-	| Please log in to use Further app ;)

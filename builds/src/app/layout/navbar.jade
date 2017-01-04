@@ -5,13 +5,13 @@
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      a.navbar-brand(ui-sref='program') Further
+      a.navbar-brand(ui-sref='/') Further
     .navbar-collapse.collapse.navbar-inverse-collapse
       ul.nav.navbar-nav
-        li(ui-sref-active="active")
+        li(ui-sref-active="active" ng-if="$rootScope.firebaseUser")
           a(ui-sref='program' href="") Program
         li(ui-sref-active="active")
-          a(ui-sref='exercises' href="") Exercises
+          a(ui-sref='exercises' href="" ng-if="$rootScope.firebaseUser") Exercises
       ul.nav.navbar-nav.navbar-right
         li.dropdown
           a.dropdown-toggle(data-target='#' data-toggle='dropdown')
