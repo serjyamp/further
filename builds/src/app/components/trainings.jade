@@ -1,92 +1,95 @@
-ul.nav.nav-tabs(style='margin-bottom: 15px;')
-	li.active
-		a(href='trainings/#program' data-toggle='tab') Program
-	li
-		a(href='trainings/#exercises' data-toggle='tab') Exercises
-#myTabContent.tab-content
-	#program.tab-pane.fade.active.in
-		ul.days_list
-			li.days_item(ng-repeat="(dayIndex, day) in vm.program")
-				.panel.panel-default
-					.panel-heading
-						.row.day_wr
-							.col-sm-12 {{day.$id}}
-						.row.tablehead_wr
-							.col-sm-7.exercise_cptn Exercise
-							.col-sm-2.exercise_cptn Sets
-							.col-sm-2.exercise_cptn Repeats
-					.panel-body
-						.row.exercises_content
-							.row.exercises_row(ng-repeat="ex in vm.program[dayIndex]")
-								.col-sm-7
-									.exercise_value {{ex.name}}
-								.col-sm-2
-									input(type="text" ng-value="ex.sets").form-control.simple_input
-								.col-sm-2
-									input(type="text" ng-value="ex.repeats").form-control.simple_input
-								.col-sm-1.text-right
-									button.btn.btn-raised.btn-danger.simple_btn(ng-click="vm.removeExFromProgram(day.$id, $index)")
-										i.fa.fa-times-circle-o(aria-hidden="true")
-		.row.add_ex.text-right
-			button.btn.btn-raised.btn-success.btn_add_ex(data-toggle='modal', data-target='#addExModal')
-				i.fa.fa-plus-circle(aria-hidden="true")
-				|  Add exercise
-	#exercises.tab-pane.fade
-		.panel.panel-default
-			.panel-heading
-				.row
-					form(ng-submit="vm.addNewEx()")
-						.col-sm-11.add_item_block
-							input.form-control(type="text" ng-model="vm.newex")
-						.col-sm-1.text-right.add_item_plus
-							button.btn.btn-raised.btn-success.simple_btn(type="submit")
-								i.fa.fa-plus-circle(aria-hidden="true")
-			.panel-body
-				ul.exercises_list
-					li.exercises_item(ng-repeat="ex in vm.exslist")
-						.col-sm-11
-							input.form-control(type="text" ng-model="ex.$value" ng-change="vm.exslist.$save(ex)")
-						.col-sm-1.text-right
-							button.btn.btn-raised.btn-danger.simple_btn(ng-click="vm.exslist.$remove(ex)")
-								i.fa.fa-times-circle-o(aria-hidden="true")
+.main_content(ng-show="$rootScope.isSigned")
+	ul.nav.nav-tabs(style='margin-bottom: 15px;')
+		li.active
+			a(href='#program' data-toggle='tab') Program
+		li
+			a(href='#exercises' data-toggle='tab') Exercises
+	#myTabContent.tab-content
+		#program.tab-pane.fade.active.in
+			ul.days_list
+				li.days_item(ng-repeat="(dayIndex, day) in vm.program")
+					.panel.panel-default
+						.panel-heading
+							.row.day_wr
+								.col-sm-12 {{day.$id}}
+							.row.tablehead_wr
+								.col-sm-7.exercise_cptn Exercise
+								.col-sm-2.exercise_cptn Sets
+								.col-sm-2.exercise_cptn Repeats
+						.panel-body
+							.row.exercises_content
+								.row.exercises_row(ng-repeat="ex in vm.program[dayIndex]")
+									.col-sm-7
+										.exercise_value {{ex.name}}
+									.col-sm-2
+										input(type="text" ng-value="ex.sets").form-control.simple_input
+									.col-sm-2
+										input(type="text" ng-value="ex.repeats").form-control.simple_input
+									.col-sm-1.text-right
+										button.btn.btn-raised.btn-danger.simple_btn(ng-click="vm.removeExFromProgram(day.$id, $index)")
+											i.fa.fa-times-circle-o(aria-hidden="true")
+			.row.add_ex.text-right
+				button.btn.btn-raised.btn-success.btn_add_ex(data-toggle='modal', data-target='#addExModal')
+					i.fa.fa-plus-circle(aria-hidden="true")
+					|  Add exercise
+		#exercises.tab-pane.fade
+			.panel.panel-default
+				.panel-heading
+					.row
+						form(ng-submit="vm.addNewEx()")
+							.col-sm-11.add_item_block
+								input.form-control(type="text" ng-model="vm.newex")
+							.col-sm-1.text-right.add_item_plus
+								button.btn.btn-raised.btn-success.simple_btn(type="submit")
+									i.fa.fa-plus-circle(aria-hidden="true")
+				.panel-body
+					ul.exercises_list
+						li.exercises_item(ng-repeat="ex in vm.exslist")
+							.col-sm-11
+								input.form-control(type="text" ng-model="ex.$value" ng-change="vm.exslist.$save(ex)")
+							.col-sm-1.text-right
+								button.btn.btn-raised.btn-danger.simple_btn(ng-click="vm.exslist.$remove(ex)")
+									i.fa.fa-times-circle-o(aria-hidden="true")
 
-#addExModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='addExLabel')
-	.modal-dialog(role='document')
-		.modal-content
-			.modal-header
-				button.close(type='button', data-dismiss='modal', aria-label='Close')
-					span(aria-hidden='true') &times;
-				h4#addExLabel.modal-title Add exercises
-			.modal-body
-				.form-group.addexs_group
-					.row
-						.col-sm-12
-							label(for='selDayOfWeek') Day of week:
-							select#selDayOfWeek.form-control(ng-model="vm.newProgramExDay" ng-init="vm.newProgramExDay = 'Monday'")
-								option(value="Monday") Monday
-								option(value="Tuesday") Tuesday
-								option(value="Wednesday") Wednesday
-								option(value="Thursday") Thursday
-								option(value="Friday") Friday
-								option(value="Saturday") Saturday
-								option(value="Sunday") Sunday
-					.row
-						.row.sel_exs_head
-							.col-sm-8
-								label Exercise
-							.col-sm-2
-								label Sets
-							.col-sm-2
-								label Repeats
-						.row.sel_exs_content
-							.row
+	#addExModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='addExLabel')
+		.modal-dialog(role='document')
+			.modal-content
+				.modal-header
+					button.close(type='button', data-dismiss='modal', aria-label='Close')
+						span(aria-hidden='true') &times;
+					h4#addExLabel.modal-title Add exercises
+				.modal-body
+					.form-group.addexs_group
+						.row
+							.col-sm-12
+								label(for='selDayOfWeek') Day of week:
+								select#selDayOfWeek.form-control(ng-model="vm.newProgramExDay" ng-init="vm.newProgramExDay = 'Monday'")
+									option(value="Monday") Monday
+									option(value="Tuesday") Tuesday
+									option(value="Wednesday") Wednesday
+									option(value="Thursday") Thursday
+									option(value="Friday") Friday
+									option(value="Saturday") Saturday
+									option(value="Sunday") Sunday
+						.row
+							.row.sel_exs_head
 								.col-sm-8
-									select#selExFromList.form-control(ng-model="vm.newProgramExName")
-										option(ng-repeat="item in vm.exslist" ng-value="item.$value") {{item.$value}}
+									label Exercise
 								.col-sm-2
-									input(type="text" ng-model="vm.newProgramExSets").form-control.simple_input
+									label Sets
 								.col-sm-2
-									input(type="text" ng-model="vm.newProgramExRepeats").form-control.simple_input
-			.modal-footer
-				.col-sm-12
-					button.btn.btn-raised.btn-success(ng-click="vm.addExToProgram()") Add
+									label Repeats
+							.row.sel_exs_content
+								.row
+									.col-sm-8
+										select#selExFromList.form-control(ng-model="vm.newProgramExName")
+											option(ng-repeat="item in vm.exslist" ng-value="item.$value") {{item.$value}}
+									.col-sm-2
+										input(type="text" ng-model="vm.newProgramExSets").form-control.simple_input
+									.col-sm-2
+										input(type="text" ng-model="vm.newProgramExRepeats").form-control.simple_input
+				.modal-footer
+					.col-sm-12
+						button.btn.btn-raised.btn-success(ng-click="vm.addExToProgram()") Add
+.temp_content(ng-show="!$rootScope.isSigned")
+	| Please log in to use Further app ;)

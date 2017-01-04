@@ -1,7 +1,7 @@
 angular.module('futher.Trainings', [])
     .controller('TrainingsCtrl', TrainingsCtrl)
 
-function TrainingsCtrl(fire, $filter) {
+function TrainingsCtrl(fire, $filter, $rootScope) {
     var vm = this;
 
     // exercises
@@ -35,6 +35,4 @@ function TrainingsCtrl(fire, $filter) {
             fire.addExToProgram(vm.newProgramExDay, vm.newProgramExName, vm.newProgramExSets, vm.newProgramExRepeats);
         }
     };
-
-    var daysInWeekList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 }

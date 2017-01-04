@@ -1,39 +1,32 @@
 
-TrainingsCtrl.$inject = ["fire", "$filter"];
-fire.$inject = ["$log", "$firebaseObject", "$firebaseArray"];angular
+TrainingsCtrl.$inject = ["fire", "$filter", "$rootScope"];
+NavbarCtrl.$inject = ["$rootScope"];
+fire.$inject = ["$log", "$firebaseObject", "$firebaseArray", "$rootScope"];angular
     .module('futher', [
         'ui.router',
-        'futher.fire.service',
-        'futher.Trainings'
+        'futher.Navbar',
+        'futher.Trainings',
+        'futher.fire.service'
     ])
     .config(config);
 
 function config($stateProvider, $urlRouterProvider, $locationProvider) {
-    // $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode(true);
 
     $urlRouterProvider.otherwise('/');
 
     $stateProvider
         .state('/', {
             url: '/',
-            template: ''
-        })
-        .state('trainings', {
-            url: '/trainings',
             templateUrl: 'app/components/trainings.html',
             controller: 'TrainingsCtrl',
             controllerAs: 'vm'
-        })
-        .state('nutrition', {
-            url: '/nutrition',
-            templateUrl: 'app/components/nutrition.html'
         });
 }
-
 angular.module('futher.Trainings', [])
     .controller('TrainingsCtrl', TrainingsCtrl)
 
-function TrainingsCtrl(fire, $filter) {
+function TrainingsCtrl(fire, $filter, $rootScope) {
     var vm = this;
 
     // exercises
@@ -67,11 +60,27 @@ function TrainingsCtrl(fire, $filter) {
             fire.addExToProgram(vm.newProgramExDay, vm.newProgramExName, vm.newProgramExSets, vm.newProgramExRepeats);
         }
     };
-
-    var daysInWeekList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 }
 
+angular.module('futher.Navbar', [])
+    .controller('NavbarCtrl', NavbarCtrl);
 
+function NavbarCtrl($rootScope) {
+    var vm = this;
+    var provider = new firebase.auth.GoogleAuthProvider();
+
+    $rootScope.isSigned = false;
+    vm.signin = function() {
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+            $rootScope.isSigned = true;
+        }).catch(function(error) {});
+    };
+    vm.signout = function() {
+        firebase.auth().signOut().then(function() {
+            $rootScope.isSigned = false;
+        }, function(error) {});
+    };
+}
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyDLAofEFCEF-s0_oyxVePgmRQPq-PSh5nk",
@@ -86,7 +95,7 @@ angular
     .module('futher.fire.service', ['firebase'])
     .service('fire', fire);
 
-function fire($log, $firebaseObject, $firebaseArray) {
+function fire($log, $firebaseObject, $firebaseArray, $rootScope) {
     var vm = this;
 
     var ref = firebase.database().ref();
@@ -122,11 +131,19 @@ function fire($log, $firebaseObject, $firebaseArray) {
         return programArr.$loaded(cb);
     };
 
+    var daysRef = {
+        Monday: $firebaseArray(ref.child('program/Monday')),
+        Tuesday: $firebaseArray(ref.child('program/Tuesday')),
+        Wednesday: $firebaseArray(ref.child('program/Wednesday')),
+        Thursday: $firebaseArray(ref.child('program/Thursday')),
+        Friday: $firebaseArray(ref.child('program/Friday')),
+        Saturday: $firebaseArray(ref.child('program/Saturday')),
+        Sunday: $firebaseArray(ref.child('program/Sunday'))
+    };
+
     vm.removeExFromProgram = function(day, exercise) {
-        var dayRef = ref.child('program/' + day);
-        var dayArr = $firebaseArray(dayRef);
+        var dayArr = daysRef[day];
         var item = dayArr[exercise];
-        console.log(dayArr[exercise])
         return dayArr.$remove(item);
     };
 
@@ -137,15 +154,7 @@ function fire($log, $firebaseObject, $firebaseArray) {
             repeats: repeats
         };
 
-        // var dayExists = false;
-        // angular.forEach(programArr, function(value,key){
-        //     if (value == day){
-        //         dayExists = true;
-        //     }
-        // });
-
-        var dayRef = ref.child('program/' + day);
-        var dayArr = $firebaseArray(dayRef);
-        dayArr.$add(obj);
+        var dayArr = daysRef[day];
+        return dayArr.$add(obj);
     };
 }

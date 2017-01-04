@@ -12,7 +12,7 @@ angular
     .module('futher.fire.service', ['firebase'])
     .service('fire', fire);
 
-function fire($log, $firebaseObject, $firebaseArray) {
+function fire($log, $firebaseObject, $firebaseArray, $rootScope) {
     var vm = this;
 
     var ref = firebase.database().ref();
@@ -48,11 +48,19 @@ function fire($log, $firebaseObject, $firebaseArray) {
         return programArr.$loaded(cb);
     };
 
+    var daysRef = {
+        Monday: $firebaseArray(ref.child('program/Monday')),
+        Tuesday: $firebaseArray(ref.child('program/Tuesday')),
+        Wednesday: $firebaseArray(ref.child('program/Wednesday')),
+        Thursday: $firebaseArray(ref.child('program/Thursday')),
+        Friday: $firebaseArray(ref.child('program/Friday')),
+        Saturday: $firebaseArray(ref.child('program/Saturday')),
+        Sunday: $firebaseArray(ref.child('program/Sunday'))
+    };
+
     vm.removeExFromProgram = function(day, exercise) {
-        var dayRef = ref.child('program/' + day);
-        var dayArr = $firebaseArray(dayRef);
+        var dayArr = daysRef[day];
         var item = dayArr[exercise];
-        console.log(dayArr[exercise])
         return dayArr.$remove(item);
     };
 
@@ -63,15 +71,7 @@ function fire($log, $firebaseObject, $firebaseArray) {
             repeats: repeats
         };
 
-        // var dayExists = false;
-        // angular.forEach(programArr, function(value,key){
-        //     if (value == day){
-        //         dayExists = true;
-        //     }
-        // });
-
-        var dayRef = ref.child('program/' + day);
-        var dayArr = $firebaseArray(dayRef);
-        dayArr.$add(obj);
+        var dayArr = daysRef[day];
+        return dayArr.$add(obj);
     };
 }
