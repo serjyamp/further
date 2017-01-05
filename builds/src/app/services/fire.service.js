@@ -12,50 +12,53 @@ angular
     .module('further.fire.service', ['firebase'])
     .service('fire', fire);
 
-function fire($log, $firebaseObject, $firebaseArray, $rootScope) {
+function fire($log, $firebaseObject, $firebaseArray, $rootScope, AuthFactory) {
     var vm = this;
+    vm.auth = AuthFactory;
 
     var ref = firebase.database().ref();
 
     // exercises
-    var exercisesRef = ref.child('exercises');
+    var uid = vm.auth.$getAuth().uid;
+    var exercisesRef = ref.child(uid + '/exercises');
     var allExercises = $firebaseArray(exercisesRef);
 
     vm.getAllExercises = function(cb) {
         return allExercises.$loaded(cb);
     };
-    vm.addNewEx = function(cb) {
+    vm.addNewEx = function(ex) {
         var duplicate = false;
         angular.forEach(allExercises, function(value, key) {
-            if (value.$value == cb) {
+            if (value.$value == ex) {
                 duplicate = true;
                 return;
             }
         });
 
         if (!duplicate) {
-            return allExercises.$add(cb);
+            return allExercises.$add(ex);
         }
 
         return false;
     };
 
     // program
-    var programRef = ref.child('program');
+    var programRef = ref.child(uid + '/program');
     var programArr = $firebaseArray(programRef);
 
     vm.getProgram = function(cb) {
         return programArr.$loaded(cb);
     };
 
+    var pathToProgram = uid + '/program/';
     var daysRef = {
-        Monday: $firebaseArray(ref.child('program/Monday')),
-        Tuesday: $firebaseArray(ref.child('program/Tuesday')),
-        Wednesday: $firebaseArray(ref.child('program/Wednesday')),
-        Thursday: $firebaseArray(ref.child('program/Thursday')),
-        Friday: $firebaseArray(ref.child('program/Friday')),
-        Saturday: $firebaseArray(ref.child('program/Saturday')),
-        Sunday: $firebaseArray(ref.child('program/Sunday'))
+        Monday: $firebaseArray(ref.child(pathToProgram + 'Monday')),
+        Tuesday: $firebaseArray(ref.child(pathToProgram + 'Tuesday')),
+        Wednesday: $firebaseArray(ref.child(pathToProgram + 'Wednesday')),
+        Thursday: $firebaseArray(ref.child(pathToProgram + 'Thursday')),
+        Friday: $firebaseArray(ref.child(pathToProgram + 'Friday')),
+        Saturday: $firebaseArray(ref.child(pathToProgram + 'Saturday')),
+        Sunday: $firebaseArray(ref.child(pathToProgram + 'Sunday'))
     };
 
     vm.removeExFromProgram = function(day, exercise) {

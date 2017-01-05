@@ -6,12 +6,12 @@ html {
     height: 100%;
 }
 
-a{
+a {
     -webkit-transition: 0.2s;
-       -moz-transition: 0.2s;
-        -ms-transition: 0.2s;
-         -o-transition: 0.2s;
-            transition: 0.2s;
+    -moz-transition: 0.2s;
+    -ms-transition: 0.2s;
+    -o-transition: 0.2s;
+    transition: 0.2s;
 }
 
 .wrap {
@@ -123,18 +123,44 @@ ul {
 
 .nav-tabs {
     background: #3F51B5;
-    &>li>a{
+    &>li>a {
         border-radius: 0;
-        &:hover{
-            background: rgba(255,255,255,0.1) !important;
+        &:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
         }
     }
 }
 
-.navbar_link{
+.navbar_link {
     cursor: pointer;
 }
 
-.dropdown-toggle{
+.dropdown-toggle {
     cursor: pointer;
+}
+
+.navbar-nav {
+    li {
+        a {
+            &:hover {
+                background: rgba(255, 255, 255, 0.1) !important;
+            }
+        }
+    }
+}
+
+.userimg{
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    img{
+        max-width: 100%;
+    }
+}
+.signed{
+    padding-top: 10px !important;
+    padding-bottom: 7px !important;
 }

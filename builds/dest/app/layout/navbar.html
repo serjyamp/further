@@ -6,14 +6,14 @@
     </div>
     <div class="navbar-collapse collapse navbar-inverse-collapse">
       <ul class="nav navbar-nav">
-        <li ui-sref-active="active" ng-if="$rootScope.firebaseUser"><a ui-sref="program" href="">Program</a></li>
-        <li ui-sref-active="active"><a ui-sref="exercises" href="" ng-if="$rootScope.firebaseUser">Exercises</a></li>
+        <li ui-sref-active="active" ng-if="$root.firebaseUser"><a ui-sref="trainings" href="">Trainings</a></li>
+        <li ui-sref-active="active" ng-if="$root.firebaseUser"><a ui-sref="exercises" href="">Exercises</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown"><a data-target="#" data-toggle="dropdown" class="dropdown-toggle">Login<b class="caret"></b></a>
+        <li class="dropdown"><a data-target="#" data-toggle="dropdown" ng-class="{signed : $root.firebaseUser}" class="dropdown-toggle"><span ng-show="!$root.firebaseUser">Login <b class="caret"></b></span><span ng-show="$root.firebaseUser" class="userimg"><img ng-src="{{$root.firebaseUser.photoURL}}"/></span></a>
           <ul class="dropdown-menu">
-            <li><a ng-click="vm.auth.$signInWithPopup('google')" class="navbar_link">Google</a></li>
-            <li><a ng-click="vm.auth.$signOut()" class="navbar_link">Sign out</a></li>
+            <li ng-if="!$root.firebaseUser"><a ng-click="vm.auth.$signInWithPopup('google')" class="navbar_link">Google</a></li>
+            <li ng-if="$root.firebaseUser"><a ng-click="vm.auth.$signOut()" class="navbar_link">Sign out</a></li>
           </ul>
         </li>
       </ul>

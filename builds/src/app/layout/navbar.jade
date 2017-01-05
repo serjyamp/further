@@ -8,21 +8,20 @@
       a.navbar-brand(ui-sref='/') Further
     .navbar-collapse.collapse.navbar-inverse-collapse
       ul.nav.navbar-nav
-        li(ui-sref-active="active" ng-if="$rootScope.firebaseUser")
-          a(ui-sref='program' href="") Program
-        li(ui-sref-active="active")
-          a(ui-sref='exercises' href="" ng-if="$rootScope.firebaseUser") Exercises
+        li(ui-sref-active="active" ng-if="$root.firebaseUser")
+          a(ui-sref='trainings' href="") Trainings
+        li(ui-sref-active="active" ng-if="$root.firebaseUser")
+          a(ui-sref='exercises' href="") Exercises
       ul.nav.navbar-nav.navbar-right
         li.dropdown
-          a.dropdown-toggle(data-target='#' data-toggle='dropdown')
-            | Login
-            b.caret
+          a.dropdown-toggle(data-target='#' data-toggle='dropdown' ng-class="{signed : $root.firebaseUser}")
+            span(ng-show="!$root.firebaseUser")
+              | Login 
+              b.caret
+            span.userimg(ng-show="$root.firebaseUser")
+              img(ng-src="{{$root.firebaseUser.photoURL}}")
           ul.dropdown-menu
-            //- li(ng-show="!$rootScope.isSigned")
-            //-   a(ng-click="vm.signin()").navbar_link Google
-            //- li(ng-show="$rootScope.isSigned")
-            //-   a(ng-click="vm.signout()").navbar_link Sign out
-            li()
+            li(ng-if="!$root.firebaseUser")
               a(ng-click="vm.auth.$signInWithPopup('google')").navbar_link Google
-            li()
+            li(ng-if="$root.firebaseUser")
               a(ng-click="vm.auth.$signOut()").navbar_link Sign out

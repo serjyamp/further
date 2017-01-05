@@ -1,12 +1,14 @@
 
-TrainingsCtrl.$inject = ["fire", "$filter", "$rootScope"];
 NavbarCtrl.$inject = ["$rootScope", "AuthFactory"];
+ExercisesCtrl.$inject = ["fire", "$rootScope"];
+TrainingsCtrl.$inject = ["fire", "$rootScope"];
     AuthFactory.$inject = ["$firebaseAuth"];
-fire.$inject = ["$log", "$firebaseObject", "$firebaseArray", "$rootScope"];angular
+fire.$inject = ["$log", "$firebaseObject", "$firebaseArray", "$rootScope", "AuthFactory"];angular
     .module('further', [
         'ui.router',
         'further.Navbar',
         'further.Trainings',
+        'further.Exercises',
         'further.fire.service',
         'further.auth.factory'
     ])
@@ -15,27 +17,45 @@ fire.$inject = ["$log", "$firebaseObject", "$firebaseArray", "$rootScope"];angul
 function config($stateProvider, $urlRouterProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 
-    $urlRouterProvider.otherwise('/program');
+    $urlRouterProvider.otherwise('/trainings');
 
     $stateProvider
         .state('/', {
             url: '/',
             template: "<h1>Hello</h1>"
         })
-        .state('program', {
-            url: '/program',
+        .state('trainings', {
+            url: '/trainings',
             templateUrl: 'app/components/trainings.html',
             controller: 'TrainingsCtrl',
             controllerAs: 'vm'
+        })
+        .state('exercises', {
+            url: '/exercises',
+            templateUrl: 'app/components/exercises.html',
+            controller: 'ExercisesCtrl',
+            controllerAs: 'vm'
         });
 }
-angular.module('further.Trainings', [])
-    .controller('TrainingsCtrl', TrainingsCtrl)
+angular.module('further.Navbar', [])
+    .controller('NavbarCtrl', NavbarCtrl);
 
-function TrainingsCtrl(fire, $filter, $rootScope) {
+function NavbarCtrl($rootScope, AuthFactory) {
     var vm = this;
+    vm.auth = AuthFactory;
 
-    // exercises
+    vm.auth.$onAuthStateChanged(function(firebaseUser) {
+      $rootScope.firebaseUser = firebaseUser;
+    });
+
+    vm.photoURL = null;
+}
+
+angular.module('further.Exercises', [])
+    .controller('ExercisesCtrl', ExercisesCtrl);
+
+function ExercisesCtrl(fire, $rootScope) {
+    var vm = this;
     vm.newex = null;
 
     vm.addNewEx = function() {
@@ -51,11 +71,25 @@ function TrainingsCtrl(fire, $filter, $rootScope) {
     fire.getAllExercises().then(function(_d) {
         vm.exslist = _d;
     });
+}
 
-    // program
+angular.module('further.Trainings', [])
+    .controller('TrainingsCtrl', TrainingsCtrl)
+
+function TrainingsCtrl(fire, $rootScope) {
+    var vm = this;
+    
     fire.getProgram().then(function(_d) {
         vm.program = _d;
     });
+
+    fire.getAllExercises().then(function(_d) {
+        vm.exslist = _d;
+    });
+
+    vm.removeExFromProgram = function(day, exercise) {
+        fire.removeExFromProgram(day, exercise);
+    };
 
     vm.newProgramExDay = null;
     vm.newProgramExName = null;
@@ -66,31 +100,6 @@ function TrainingsCtrl(fire, $filter, $rootScope) {
             fire.addExToProgram(vm.newProgramExDay, vm.newProgramExName, vm.newProgramExSets, vm.newProgramExRepeats);
         }
     };
-}
-
-angular.module('further.Navbar', [])
-    .controller('NavbarCtrl', NavbarCtrl);
-
-function NavbarCtrl($rootScope, AuthFactory) {
-    var vm = this;
-    vm.auth = AuthFactory;
-
-    vm.auth.$onAuthStateChanged(function(firebaseUser) {
-      $rootScope.firebaseUser = firebaseUser;
-      console.log($rootScope.firebaseUser);
-    });
-
-    // vm.signin = function() {
-    //     console.log(vm.auth)
-    //     vm.auth.signInWithPopup(provider).then(function(result) {
-    //         $rootScope.isSigned = true;
-    //     }).catch(function(error) {});
-    // };
-    // vm.signout = function() {
-    //     vm.auth.signOut().then(function() {
-    //         $rootScope.isSigned = false;
-    //     }, function(error) {});
-    // };
 }
 
 angular
@@ -114,50 +123,53 @@ angular
     .module('further.fire.service', ['firebase'])
     .service('fire', fire);
 
-function fire($log, $firebaseObject, $firebaseArray, $rootScope) {
+function fire($log, $firebaseObject, $firebaseArray, $rootScope, AuthFactory) {
     var vm = this;
+    vm.auth = AuthFactory;
 
     var ref = firebase.database().ref();
 
     // exercises
-    var exercisesRef = ref.child('exercises');
+    var uid = vm.auth.$getAuth().uid;
+    var exercisesRef = ref.child(uid + '/exercises');
     var allExercises = $firebaseArray(exercisesRef);
 
     vm.getAllExercises = function(cb) {
         return allExercises.$loaded(cb);
     };
-    vm.addNewEx = function(cb) {
+    vm.addNewEx = function(ex) {
         var duplicate = false;
         angular.forEach(allExercises, function(value, key) {
-            if (value.$value == cb) {
+            if (value.$value == ex) {
                 duplicate = true;
                 return;
             }
         });
 
         if (!duplicate) {
-            return allExercises.$add(cb);
+            return allExercises.$add(ex);
         }
 
         return false;
     };
 
     // program
-    var programRef = ref.child('program');
+    var programRef = ref.child(uid + '/program');
     var programArr = $firebaseArray(programRef);
 
     vm.getProgram = function(cb) {
         return programArr.$loaded(cb);
     };
 
+    var pathToProgram = uid + '/program/';
     var daysRef = {
-        Monday: $firebaseArray(ref.child('program/Monday')),
-        Tuesday: $firebaseArray(ref.child('program/Tuesday')),
-        Wednesday: $firebaseArray(ref.child('program/Wednesday')),
-        Thursday: $firebaseArray(ref.child('program/Thursday')),
-        Friday: $firebaseArray(ref.child('program/Friday')),
-        Saturday: $firebaseArray(ref.child('program/Saturday')),
-        Sunday: $firebaseArray(ref.child('program/Sunday'))
+        Monday: $firebaseArray(ref.child(pathToProgram + 'Monday')),
+        Tuesday: $firebaseArray(ref.child(pathToProgram + 'Tuesday')),
+        Wednesday: $firebaseArray(ref.child(pathToProgram + 'Wednesday')),
+        Thursday: $firebaseArray(ref.child(pathToProgram + 'Thursday')),
+        Friday: $firebaseArray(ref.child(pathToProgram + 'Friday')),
+        Saturday: $firebaseArray(ref.child(pathToProgram + 'Saturday')),
+        Sunday: $firebaseArray(ref.child(pathToProgram + 'Sunday'))
     };
 
     vm.removeExFromProgram = function(day, exercise) {
