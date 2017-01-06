@@ -6,8 +6,8 @@
     </div>
     <div class="navbar-collapse collapse navbar-inverse-collapse">
       <ul class="nav navbar-nav">
-        <li ui-sref-active="active" ng-if="$root.firebaseUser"><a ui-sref="trainings" href="">trainings</a></li>
         <li ui-sref-active="active" ng-if="$root.firebaseUser"><a ui-sref="exercises" href="">exercises</a></li>
+        <li ui-sref-active="active" ng-if="$root.firebaseUser"><a ui-sref="trainings" href="">trainings</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown"><a data-target="#" data-toggle="dropdown" ng-class="{signed : $root.firebaseUser}" class="dropdown-toggle"><span ng-show="!$root.firebaseUser">login <b class="caret"></b></span><span ng-show="$root.firebaseUser" class="userimg"><img ng-src="{{$root.firebaseUser.photoURL}}"/></span></a>

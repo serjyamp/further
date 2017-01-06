@@ -17,7 +17,7 @@ fire.$inject = ["$log", "$firebaseObject", "$firebaseArray", "$rootScope", "Auth
 function config($stateProvider, $urlRouterProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 
-    $urlRouterProvider.otherwise('/trainings');
+    $urlRouterProvider.otherwise('/exercises');
 
     $stateProvider
         .state('/', {
@@ -104,7 +104,7 @@ function NavbarCtrl($rootScope, $state, AuthFactory) {
     vm.auth.authVar.$onAuthStateChanged(function(firebaseUser) {
         $rootScope.firebaseUser = firebaseUser;
         if ($rootScope.firebaseUser) {
-            $state.go('trainings');
+            $state.go('exercises');
         }
     });
 

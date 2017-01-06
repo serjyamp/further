@@ -12,7 +12,7 @@ angular
 function config($stateProvider, $urlRouterProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 
-    $urlRouterProvider.otherwise('/trainings');
+    $urlRouterProvider.otherwise('/exercises');
 
     $stateProvider
         .state('/', {
