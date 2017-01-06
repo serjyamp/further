@@ -8,20 +8,15 @@ function AuthFactory($firebaseAuth) {
     var service = {
     	authVar: auth,
         signIn: signIn,
-        signOut: signOut,
-        isLoggedIn: isLoggedIn
+        signOut: signOut
     };
 
     function signIn() {
-        auth.$signInWithPopup('google');
+        return auth.$signInWithPopup('google');
     }
 
     function signOut() {
-        auth.$signOut();
-    }
-
-    function isLoggedIn() {
-        return auth.$getAuth();
+        return auth.$signOut();
     }
 
     return service;

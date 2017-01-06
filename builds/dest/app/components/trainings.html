@@ -1,99 +1,105 @@
 
-<ul class="days_list">
-  <li ng-repeat="(dayIndex, day) in vm.program" class="days_item">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <div class="row day_wr">
-          <div class="col-sm-12">{{day.$id}}</div>
-        </div>
-        <div class="row tablehead_wr">
-          <div class="col-sm-7 exercise_cptn">Exercise</div>
-          <div class="col-sm-2 exercise_cptn">Sets</div>
-          <div class="col-sm-2 exercise_cptn">Repeats</div>
-        </div>
-      </div>
-      <div class="panel-body">
-        <div class="row exercises_content">
-          <div ng-repeat="ex in vm.program[dayIndex]" class="row exercises_row">
-            <div class="col-sm-7">
-              <div class="exercise_value">{{ex.name}}</div>
+<main>
+  <div class="container">
+    <div class="ox_block">
+      <ul class="days_list">
+        <li ng-repeat="(dayIndex, day) in vm.program" class="days_item">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="row day_wr">
+                <div class="col-sm-12">{{day.$id}}</div>
+              </div>
+              <div class="row tablehead_wr">
+                <div class="col-sm-7 col-xs-7 exercise_cptn">Exercise</div>
+                <div class="col-sm-2 col-xs-2 exercise_cptn">Sets</div>
+                <div class="col-sm-2 col-xs-2 exercise_cptn">Repeats</div>
+              </div>
             </div>
-            <div class="col-sm-2">
-              <input type="text" ng-value="ex.sets" class="form-control simple_input"/>
-            </div>
-            <div class="col-sm-2">
-              <input type="text" ng-value="ex.repeats" class="form-control simple_input"/>
-            </div>
-            <div class="col-sm-1 text-right">
-              <button ng-click="vm.removeExFromProgram(day.$id, $index)" class="btn btn-raised btn-danger simple_btn"><i aria-hidden="true" class="fa fa-times-circle-o"></i></button>
+            <div class="panel-body">
+              <div class="row exercises_content">
+                <div ng-repeat="ex in vm.program[dayIndex]" class="row exercises_row">
+                  <div class="col-sm-7 col-xs-7">
+                    <div class="exercise_value">{{ex.name}}</div>
+                  </div>
+                  <div class="col-sm-2 col-xs-2">
+                    <input type="text" ng-value="ex.sets" class="form-control simple_input"/>
+                  </div>
+                  <div class="col-sm-2 col-xs-2">
+                    <input type="text" ng-value="ex.repeats" class="form-control simple_input"/>
+                  </div>
+                  <div class="col-sm-1 col-xs-1 text-right">
+                    <button ng-click="vm.removeExFromProgram(day.$id, $index)" class="btn btn-raised btn-danger simple_btn"><i aria-hidden="true" class="fa fa-times-circle-o"></i></button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
     </div>
-  </li>
-</ul>
-<div class="row add_ex text-right">
-  <button data-toggle="modal" data-target="#addExModal" class="btn btn-raised btn-success btn_add_ex"><i aria-hidden="true" class="fa fa-plus-circle"></i> Add exercise</button>
-</div>
-<div id="addExModal" tabindex="-1" role="dialog" aria-labelledby="addExLabel" class="modal fade">
-  <div role="document" class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
-        <h4 id="addExLabel" class="modal-title">Add exercises</h4>
-      </div>
-      <div class="modal-body">
-        <div class="form-group addexs_group">
-          <div class="row">
-            <div class="col-sm-12">
-              <label for="selDayOfWeek">Day of week:</label>
-              <select id="selDayOfWeek" ng-model="vm.newProgramExDay" ng-init="vm.newProgramExDay = 'Monday'" class="form-control">
-                <option value="Monday">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-                <option value="Sunday">Sunday</option>
-              </select>
-            </div>
+    <div class="row add_ex text-right">
+      <button data-toggle="modal" data-target="#addExModal" class="btn btn-raised btn-success btn_add_ex"><i aria-hidden="true" class="fa fa-plus-circle"></i> Add exercise</button>
+    </div>
+    <div id="addExModal" tabindex="-1" role="dialog" aria-labelledby="addExLabel" class="modal fade">
+      <div role="document" class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
+            <h4 id="addExLabel" class="modal-title">Add exercises</h4>
           </div>
-          <div class="row">
-            <div class="row sel_exs_head">
-              <div class="col-sm-8">
-                <label>Exercise</label>
-              </div>
-              <div class="col-sm-2">
-                <label>Sets</label>
-              </div>
-              <div class="col-sm-2">
-                <label>Repeats</label>
-              </div>
-            </div>
-            <div class="row sel_exs_content">
+          <div class="modal-body">
+            <div class="form-group addexs_group">
               <div class="row">
-                <div class="col-sm-8">
-                  <select id="selExFromList" ng-model="vm.newProgramExName" class="form-control">
-                    <option ng-repeat="item in vm.exslist" ng-value="item.$value">{{item.$value}}</option>
+                <div class="col-sm-12 col-xs-12 no-pad-l no-pad-r">
+                  <label for="selDayOfWeek">Day of week:</label>
+                  <select id="selDayOfWeek" ng-model="vm.newProgramExDay" ng-init="vm.newProgramExDay = 'Monday'" class="form-control">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
                   </select>
                 </div>
-                <div class="col-sm-2">
-                  <input type="text" ng-model="vm.newProgramExSets" class="form-control simple_input"/>
+              </div>
+              <div class="row">
+                <div class="row sel_exs_head">
+                  <div class="col-sm-8 col-xs-8 no-pad-l">
+                    <label>Exercise</label>
+                  </div>
+                  <div class="col-sm-2 col-xs-2">
+                    <label>Sets</label>
+                  </div>
+                  <div class="col-sm-2 col-xs-2 no-pad-r">
+                    <label>Repeats</label>
+                  </div>
                 </div>
-                <div class="col-sm-2">
-                  <input type="text" ng-model="vm.newProgramExRepeats" class="form-control simple_input"/>
+                <div class="row sel_exs_content">
+                  <div class="row">
+                    <div class="col-sm-8 col-xs-8 no-pad-l">
+                      <select id="selExFromList" ng-model="vm.newProgramExName" class="form-control">
+                        <option ng-repeat="item in vm.exslist" ng-value="item.$value">{{item.$value}}</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-2 col-xs-2">
+                      <input type="text" ng-model="vm.newProgramExSets" class="form-control simple_input"/>
+                    </div>
+                    <div class="col-sm-2 col-xs-2 no-pad-r">
+                      <input type="text" ng-model="vm.newProgramExRepeats" class="form-control simple_input"/>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <div class="col-sm-12">
-          <button ng-click="vm.addExToProgram()" class="btn btn-raised btn-success">Add</button>
+          <div class="modal-footer">
+            <div class="col-sm-12 col-xs-12 no-pad-r">
+              <button ng-click="vm.addExToProgram()" class="btn btn-raised btn-success">Add</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</main>

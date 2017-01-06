@@ -17,7 +17,7 @@ function config($stateProvider, $urlRouterProvider, $locationProvider) {
     $stateProvider
         .state('/', {
             url: '/',
-            template: "<h1>Hello</h1>"
+            templateUrl: 'app/components/start.html'
         })
         .state('trainings', {
             url: '/trainings',

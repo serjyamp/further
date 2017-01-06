@@ -1,11 +1,12 @@
 angular.module('further.Trainings', [])
     .controller('TrainingsCtrl', TrainingsCtrl)
 
-function TrainingsCtrl(fire, $rootScope) {
+function TrainingsCtrl(fire, $rootScope, AuthFactory) {
     var vm = this;
+    vm.auth = AuthFactory;
     vm.exslist = [];
     vm.program = [];
-    
+
     fire.getProgram().then(function(_d) {
         vm.program = _d;
     });

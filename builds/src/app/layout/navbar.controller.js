@@ -6,16 +6,18 @@ function NavbarCtrl($rootScope, $state, AuthFactory) {
     vm.auth = AuthFactory;
 
     vm.auth.authVar.$onAuthStateChanged(function(firebaseUser) {
-      $rootScope.firebaseUser = firebaseUser;
+        $rootScope.firebaseUser = firebaseUser;
+        if ($rootScope.firebaseUser) {
+            $state.go('trainings');
+        }
     });
 
-    vm.signOut = function(){
-    	vm.auth.signOut();
+    vm.signOut = function() {
+        vm.auth.signOut();
         $state.go('/');
     };
-    vm.signIn = function(){
+    vm.signIn = function() {
         vm.auth.signIn();
-    	$state.go('trainings');
     };
 
     vm.photoURL = null;

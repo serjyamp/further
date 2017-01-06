@@ -1,27 +1,31 @@
 
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <div class="row">
-      <form ng-submit="vm.addNewEx()">
-        <div class="col-sm-11 add_item_block">
-          <input type="text" ng-model="vm.newex" class="form-control"/>
+<main>
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <form ng-submit="vm.addNewEx()">
+            <div class="col-sm-11 col-xs-11 add_item_block">
+              <input type="text" ng-model="vm.newex" class="form-control ex_input"/>
+            </div>
+            <div class="col-sm-1 col-xs-1 text-right add_item_plus">
+              <button type="submit" class="btn btn-raised btn-success simple_btn"><i aria-hidden="true" class="fa fa-plus-circle"></i></button>
+            </div>
+          </form>
         </div>
-        <div class="col-sm-1 text-right add_item_plus">
-          <button type="submit" class="btn btn-raised btn-success simple_btn"><i aria-hidden="true" class="fa fa-plus-circle"></i></button>
-        </div>
-      </form>
+      </div>
+      <div class="panel-body">
+        <ul class="exercises_list">
+          <li ng-repeat="ex in vm.exslist" class="exercises_item">
+            <div class="col-sm-11 col-xs-11">
+              <input type="text" ng-model="ex.$value" ng-change="vm.exslist.$save(ex)" class="form-control"/>
+            </div>
+            <div class="col-sm-1 col-xs-1 text-right">
+              <button ng-click="vm.exslist.$remove(ex)" class="btn btn-raised btn-danger simple_btn"><i aria-hidden="true" class="fa fa-times-circle-o"></i></button>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
-  <div class="panel-body">
-    <ul class="exercises_list">
-      <li ng-repeat="ex in vm.exslist" class="exercises_item">
-        <div class="col-sm-11">
-          <input type="text" ng-model="ex.$value" ng-change="vm.exslist.$save(ex)" class="form-control"/>
-        </div>
-        <div class="col-sm-1 text-right">
-          <button ng-click="vm.exslist.$remove(ex)" class="btn btn-raised btn-danger simple_btn"><i aria-hidden="true" class="fa fa-times-circle-o"></i></button>
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>
+</main>

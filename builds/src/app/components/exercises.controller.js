@@ -1,14 +1,17 @@
 angular.module('further.Exercises', [])
     .controller('ExercisesCtrl', ExercisesCtrl);
 
-function ExercisesCtrl(fire, $rootScope) {
+function ExercisesCtrl(fire, $rootScope, AuthFactory) {
     var vm = this;
+    vm.auth = AuthFactory;
     vm.newex = null;
     vm.exslist = [];
     
     vm.addNewEx = function() {
         if (vm.newex) {
-            fire.addNewEx(vm.newex);
+            if (fire.addNewEx(vm.newex)){
+                vm.newex = null;
+            }
         }
     };
 

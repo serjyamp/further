@@ -1,6 +1,6 @@
 
-ExercisesCtrl.$inject = ["fire", "$rootScope"];
-TrainingsCtrl.$inject = ["fire", "$rootScope"];
+ExercisesCtrl.$inject = ["fire", "$rootScope", "AuthFactory"];
+TrainingsCtrl.$inject = ["fire", "$rootScope", "AuthFactory"];
 NavbarCtrl.$inject = ["$rootScope", "$state", "AuthFactory"];
 AuthFactory.$inject = ["$firebaseAuth"];
 fire.$inject = ["$log", "$firebaseObject", "$firebaseArray", "$rootScope", "AuthFactory"];angular
@@ -22,7 +22,7 @@ function config($stateProvider, $urlRouterProvider, $locationProvider) {
     $stateProvider
         .state('/', {
             url: '/',
-            template: "<h1>Hello</h1>"
+            templateUrl: 'app/components/start.html'
         })
         .state('trainings', {
             url: '/trainings',
@@ -40,14 +40,17 @@ function config($stateProvider, $urlRouterProvider, $locationProvider) {
 angular.module('further.Exercises', [])
     .controller('ExercisesCtrl', ExercisesCtrl);
 
-function ExercisesCtrl(fire, $rootScope) {
+function ExercisesCtrl(fire, $rootScope, AuthFactory) {
     var vm = this;
+    vm.auth = AuthFactory;
     vm.newex = null;
     vm.exslist = [];
     
     vm.addNewEx = function() {
         if (vm.newex) {
-            fire.addNewEx(vm.newex);
+            if (fire.addNewEx(vm.newex)){
+                vm.newex = null;
+            }
         }
     };
 
@@ -59,15 +62,15 @@ function ExercisesCtrl(fire, $rootScope) {
         vm.exslist = _d;
     });
 }
-
 angular.module('further.Trainings', [])
     .controller('TrainingsCtrl', TrainingsCtrl)
 
-function TrainingsCtrl(fire, $rootScope) {
+function TrainingsCtrl(fire, $rootScope, AuthFactory) {
     var vm = this;
+    vm.auth = AuthFactory;
     vm.exslist = [];
     vm.program = [];
-    
+
     fire.getProgram().then(function(_d) {
         vm.program = _d;
     });
@@ -99,21 +102,22 @@ function NavbarCtrl($rootScope, $state, AuthFactory) {
     vm.auth = AuthFactory;
 
     vm.auth.authVar.$onAuthStateChanged(function(firebaseUser) {
-      $rootScope.firebaseUser = firebaseUser;
+        $rootScope.firebaseUser = firebaseUser;
+        if ($rootScope.firebaseUser) {
+            $state.go('trainings');
+        }
     });
 
-    vm.signOut = function(){
-    	vm.auth.signOut();
+    vm.signOut = function() {
+        vm.auth.signOut();
         $state.go('/');
     };
-    vm.signIn = function(){
+    vm.signIn = function() {
         vm.auth.signIn();
-    	$state.go('trainings');
     };
 
     vm.photoURL = null;
 }
-
 angular
     .module("further.auth.factory", ["firebase"])
     .factory("AuthFactory", AuthFactory);
@@ -124,20 +128,15 @@ function AuthFactory($firebaseAuth) {
     var service = {
     	authVar: auth,
         signIn: signIn,
-        signOut: signOut,
-        isLoggedIn: isLoggedIn
+        signOut: signOut
     };
 
     function signIn() {
-        auth.$signInWithPopup('google');
+        return auth.$signInWithPopup('google');
     }
 
     function signOut() {
-        auth.$signOut();
-    }
-
-    function isLoggedIn() {
-        return auth.$getAuth();
+        return auth.$signOut();
     }
 
     return service;
