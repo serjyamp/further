@@ -66,6 +66,9 @@ gulp.task('vendor', function() {
     gulp.src(bc + 'bootstrap/dist/**/*.*')
         .pipe(gulp.dest('./builds/dest/vendor/bootstrap/'));
 
+    gulp.src(bc + 'bootstrap-material-design/dist/css/bootstrap-material-design.min.css')
+        .pipe(gulp.dest('./builds/dest/vendor/bootstrap-material-design/'));
+
     gulp.src([
             bc + 'angular/angular.js',
             bc + 'angular-ui-router/release/angular-ui-router.js',
