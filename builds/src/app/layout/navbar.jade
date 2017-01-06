@@ -22,6 +22,6 @@
               img(ng-src="{{$root.firebaseUser.photoURL}}")
           ul.dropdown-menu
             li(ng-if="!$root.firebaseUser")
-              a(ng-click="vm.auth.$signInWithPopup('google')").navbar_link Google
+              a(ng-click="vm.signIn()").navbar_link Google
             li(ng-if="$root.firebaseUser")
-              a(ng-click="vm.auth.$signOut()").navbar_link Sign out
+              a(ng-click="vm.signOut()").navbar_link Sign out

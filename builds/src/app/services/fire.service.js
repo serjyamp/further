@@ -19,7 +19,7 @@ function fire($log, $firebaseObject, $firebaseArray, $rootScope, AuthFactory) {
     var ref = firebase.database().ref();
 
     // exercises
-    var uid = vm.auth.$getAuth().uid;
+    var uid = vm.auth.authVar.$getAuth().uid;
     var exercisesRef = ref.child(uid + '/exercises');
     var allExercises = $firebaseArray(exercisesRef);
 

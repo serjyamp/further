@@ -3,6 +3,8 @@ angular.module('further.Trainings', [])
 
 function TrainingsCtrl(fire, $rootScope) {
     var vm = this;
+    vm.exslist = [];
+    vm.program = [];
     
     fire.getProgram().then(function(_d) {
         vm.program = _d;

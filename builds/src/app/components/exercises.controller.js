@@ -4,7 +4,8 @@ angular.module('further.Exercises', [])
 function ExercisesCtrl(fire, $rootScope) {
     var vm = this;
     vm.newex = null;
-
+    vm.exslist = [];
+    
     vm.addNewEx = function() {
         if (vm.newex) {
             fire.addNewEx(vm.newex);

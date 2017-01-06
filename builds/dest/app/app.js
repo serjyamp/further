@@ -1,8 +1,8 @@
 
-NavbarCtrl.$inject = ["$rootScope", "AuthFactory"];
 ExercisesCtrl.$inject = ["fire", "$rootScope"];
 TrainingsCtrl.$inject = ["fire", "$rootScope"];
-    AuthFactory.$inject = ["$firebaseAuth"];
+NavbarCtrl.$inject = ["$rootScope", "$state", "AuthFactory"];
+AuthFactory.$inject = ["$firebaseAuth"];
 fire.$inject = ["$log", "$firebaseObject", "$firebaseArray", "$rootScope", "AuthFactory"];angular
     .module('further', [
         'ui.router',
@@ -37,27 +37,14 @@ function config($stateProvider, $urlRouterProvider, $locationProvider) {
             controllerAs: 'vm'
         });
 }
-angular.module('further.Navbar', [])
-    .controller('NavbarCtrl', NavbarCtrl);
-
-function NavbarCtrl($rootScope, AuthFactory) {
-    var vm = this;
-    vm.auth = AuthFactory;
-
-    vm.auth.$onAuthStateChanged(function(firebaseUser) {
-      $rootScope.firebaseUser = firebaseUser;
-    });
-
-    vm.photoURL = null;
-}
-
 angular.module('further.Exercises', [])
     .controller('ExercisesCtrl', ExercisesCtrl);
 
 function ExercisesCtrl(fire, $rootScope) {
     var vm = this;
     vm.newex = null;
-
+    vm.exslist = [];
+    
     vm.addNewEx = function() {
         if (vm.newex) {
             fire.addNewEx(vm.newex);
@@ -78,6 +65,8 @@ angular.module('further.Trainings', [])
 
 function TrainingsCtrl(fire, $rootScope) {
     var vm = this;
+    vm.exslist = [];
+    vm.program = [];
     
     fire.getProgram().then(function(_d) {
         vm.program = _d;
@@ -102,13 +91,58 @@ function TrainingsCtrl(fire, $rootScope) {
     };
 }
 
+angular.module('further.Navbar', [])
+    .controller('NavbarCtrl', NavbarCtrl);
+
+function NavbarCtrl($rootScope, $state, AuthFactory) {
+    var vm = this;
+    vm.auth = AuthFactory;
+
+    vm.auth.authVar.$onAuthStateChanged(function(firebaseUser) {
+      $rootScope.firebaseUser = firebaseUser;
+    });
+
+    vm.signOut = function(){
+    	vm.auth.signOut();
+        $state.go('/');
+    };
+    vm.signIn = function(){
+        vm.auth.signIn();
+    	$state.go('trainings');
+    };
+
+    vm.photoURL = null;
+}
+
 angular
     .module("further.auth.factory", ["firebase"])
     .factory("AuthFactory", AuthFactory);
 
-    function AuthFactory($firebaseAuth){
-    	return $firebaseAuth();
+function AuthFactory($firebaseAuth) {
+    var auth = $firebaseAuth();
+
+    var service = {
+    	authVar: auth,
+        signIn: signIn,
+        signOut: signOut,
+        isLoggedIn: isLoggedIn
+    };
+
+    function signIn() {
+        auth.$signInWithPopup('google');
     }
+
+    function signOut() {
+        auth.$signOut();
+    }
+
+    function isLoggedIn() {
+        return auth.$getAuth();
+    }
+
+    return service;
+}
+
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyDLAofEFCEF-s0_oyxVePgmRQPq-PSh5nk",
@@ -130,7 +164,7 @@ function fire($log, $firebaseObject, $firebaseArray, $rootScope, AuthFactory) {
     var ref = firebase.database().ref();
 
     // exercises
-    var uid = vm.auth.$getAuth().uid;
+    var uid = vm.auth.authVar.$getAuth().uid;
     var exercisesRef = ref.child(uid + '/exercises');
     var allExercises = $firebaseArray(exercisesRef);
 
